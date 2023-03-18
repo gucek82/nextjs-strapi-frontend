@@ -3,6 +3,8 @@ import Image from 'next/image'
 import { getProduct, getProducts } from '@/lib/products'
 import { ApiError } from '@/lib/api'
 import Page from '@/components/Page'
+import { useUser } from '../../../hooks/user'
+import AddToCart from '@/components/AddToCart'
 
 export async function getStaticPaths() {
   const products = await getProducts()
@@ -29,6 +31,8 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 function ProductPage({ product }) {
+  const user = useUser()
+  console.log(user)
   return (
     <Page title={product.title}>
       <div className="flex flex-col lg:flex-row">
@@ -38,6 +42,7 @@ function ProductPage({ product }) {
         <div className="flex-1 lg:ml-4">
           <p className="text-sm">{product.description}</p>
           <p className="text-lg font-bold mt-2">{product.price}</p>
+          {user && <AddToCart product={product.id} />}
         </div>
       </div>
     </Page>
